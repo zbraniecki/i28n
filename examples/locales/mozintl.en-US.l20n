@@ -1,0 +1,19 @@
+<years_ago_long[@cldr.plural($value)] {
+  zero: 'this year',
+  one: 'last year',
+  two: '{{$value}} years ago',
+  few: '{{$value}} years ago',
+  many: '{{$value}} years ago',
+  other: '{{$value}} years ago',
+}>
+
+<minutes_ago_long[@cldr.plural($value)] {
+  zero: 'just now',
+  one: 'a minute ago',
+  two: '{{$value}} minutes ago',
+  few: '{{$value}} mnutes ago',
+  many: '{{$value}} minutes ago',
+  other: '{{$value}} minutes ago',
+}>
+
+<durationPattern "hh:mm:ss.SS">
