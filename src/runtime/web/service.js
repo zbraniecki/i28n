@@ -12,7 +12,15 @@ export class Service {
     this.ctxs.set(view, this.env.createContext());
   }
 
-  getFormatter(view, type, options, elem) {
-    return this.ctxs.get(view).getFormatter(type, options, elem);
+  get(view, key) {
+    return this.ctxs.get(view).get(key[0], key[1]);
+  }
+
+  getAffected(view, evt) {
+    return this.ctxs.get(view).getAffected(evt);
+  }
+
+  resetKeys(view, keys) {
+    return this.ctxs.get(view).resetKeys(keys);
   }
 }

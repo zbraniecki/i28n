@@ -41,7 +41,7 @@ export function formatMutations(view, mutations) {
     return;
   }
 
-  formatElements(view, Array.from(targets));
+  formatElements(view, targets);
 }
 
 function getI18nElements(element) {
@@ -63,16 +63,16 @@ function formatFragment(root) {
   return formatElements(getI18nElement(root));
 }
 
-function formatElements(view, elements) {
+export function formatElements(view, elements) {
   view._disconnect();
 
-  for (let i = 0; i < elements.length; i++) {
-    formatElement(view, elements[i]);
-  }
+  elements.forEach(elem => formatElement(view, elem));
+
   view._observe();
 }
 
 function formatElement(view, elem) {
+  console.log("Formatting element: ", elem.outerHTML);
   const format = elem.getAttribute('data-i18n-format');
   if (!elem.hasAttribute('data-i18n-value')) {
     return;
@@ -82,34 +82,15 @@ function formatElement(view, elem) {
   const options = elem.hasAttribute('data-i18n-options') ?
     JSON.parse(elem.getAttribute('data-i18n-options')) : {};
 
-  const formatter = view._getFormatter(format, options, elem);
+  const formatter = view._get([format, options]);
   let resolvedValue;
 
   switch (format) {
     case 'datetime':
       resolvedValue = new Date(parseInt(value));
-      const resolvedOptions = Object.assign({}, options);
-      if (resolvedOptions.hour12 === undefined) {
-        resolvedOptions.hour12 = navigator.mozHour12;
-      }
       elem.textContent = formatter.format(resolvedValue);
-      break;
-    case 'number':
-      resolvedValue = parseInt(value);
-      elem.textContent = formatter.format(resolvedValue);
-      break;
-    case 'mozduration':
-      resolvedValue = parseInt(value);
-      mozIntl.DurationFormat(navigator.languages, options).then(f => {
-        elem.textContent = f.format(resolvedValue);
-      });
-      break;
-    case 'mozrelativetime':
-      resolvedValue = parseInt(value);
-      var f = mozIntl.RelativeTimeFormat(navigator.languages, options);
-      f.format(resolvedValue).then(v => {
-        elem.textContent = v;
-      });
       break;
   }
+
+  view._set(elem, [format, options]);
 }

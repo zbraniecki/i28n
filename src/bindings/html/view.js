@@ -1,6 +1,7 @@
 'use strict';
 
-import { formatMutations } from './dom';
+import { formatMutations, formatElements } from './dom';
+import { deepEqual, deepIncludes } from '../../lib/utils';
 
 const observerConfig = {
   attributes: true,
@@ -14,18 +15,55 @@ export class View {
   constructor(client, doc) {
     this._doc = doc;
     this._client = client;
-
-    const observer = new MutationObserver(formatMutations.bind(null, this));
-    this._observe = () => observer.observe(doc, observerConfig);
-    this._disconnect = () => observer.disconnect();
+    this._observer = new MutationObserver(formatMutations.bind(null, this));
+    this._keys = new Map();
 
     this._observe();
     client.registerView(this);
   }
 
-  _getFormatter(...args) {
-    return  this._client.getFormatter(this, ...args);
+  _observe() {
+    window.addEventListener('timeformatchange', this);
+    window.addEventListener('languagechange', this);
+    this._observer.observe(this._doc, observerConfig);
   }
+
+  _disconnect() {
+    this._observer.disconnect();
+  }
+
+  _get(...args) {
+    return  this._client.get(this, ...args);
+  }
+
+  _set(elem, key) {
+    if (!this._keys.has(key)) {
+      this._keys.set(key, new Set());
+    }
+    this._keys.get(key).add(elem);
+  }
+
+  handleEvent(evt) {
+    const affectedKeys = this._client.getAffected(this, evt);
+
+    this._client.resetKeys(this, affectedKeys);
+
+    const affectedElems = new Set();
+    this._keys.forEach((elems, key) => {
+      if (deepIncludes(affectedKeys, key)) {
+        elems.forEach(elem => affectedElems.add(elem));
+      }
+    });
+
+    formatElements(this, affectedElems);
+  }
+
+
+
+
+
+
+
 
   /* DOM API */
   setAttributes(element, format, value, options) {
