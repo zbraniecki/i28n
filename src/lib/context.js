@@ -1,29 +1,12 @@
-'use strict';
+import { Cache } from './cache';
 
 export class Context {
-  constructor(env) {
-    this._env = env;
-    this.names = new Map();
-  }
-
-  define(name, type, options) {
-    this.names.set(name, [type, options]);
-  }
-
-  get(type, options) {
-    return this._env.get([type, options]);
-  }
-  
-  getNamed(name) {
-    const key = this.names[name];
-    return this._env.get(key);
-  }
-
-  getAffected(evt) {
-    return this._env.getAffected(evt);
-  }
-
-  resetKeys(keys) {
-    return this._env.resetKeys(keys);
+  constructor(doc) {
+    this._doc = doc;
+    //this._observer = new MutationObserver(formatMutations.bind(null, this));
+    this._cache = new Cache();
+    this._keys = new Map();
+    //this._observe();
   }
 }
+

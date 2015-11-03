@@ -2,15 +2,29 @@
   <head>
     <meta charset="utf-8">
     <script type="application/javascript;version=1.8"
-      src="../../dist/web/i28n.js"></script>
+      src="../../dist/i28n.js"></script>
     <script defer src="./index.js"></script>
+    <style type="application/mozi18n">
+      {
+        "longDate" : {
+          "type": "datetime",
+          "options": {
+            "year": "numeric",
+            "weekday": "long",
+            "hour": "numeric",
+            "day": "numeric",
+            "minute": "numeric"
+          }
+        }
+      }
+    </style>
   </head>
   <body>
     <p>This is pure i28n example, with no dependencies, just internationalize
     two DOM elements. First with a datetime, second with a number.</p>
-    <h1 data-i18n-format="datetime" data-i18n-value="0" data-i18n-options='{"year": "numeric", "weekday": "long", "day": "numeric", "hour": "numeric", "minute": "numeric"}'></h1>
+    <h1 data-i18n-type="datetime" data-i18n-value="0" data-i18n-options='{"year": "numeric", "weekday": "long", "day": "numeric", "hour": "numeric", "minute": "numeric"}'></h1>
 
-    <h3 data-i18n-format="datetime" data-i18n-value="1" data-i18n-options='{"year": "numeric",
+    <h3 data-i18n-type="datetime" data-i18n-value="1000000000000" data-i18n-options='{"year": "numeric",
       "weekday": "long", "day": "numeric", "hour": "numeric", "minute":
       "numeric"}'></h3>
   </body>

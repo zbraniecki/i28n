@@ -1,8 +1,9 @@
-'use strict';
+export const deepEqual = function(obj1, obj2) {
+  if (!obj1) obj1 = {};
+  if (!obj2) obj2 = {};
 
-export function deepEqual(obj1, obj2) {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
+  const keys1 = Object.getOwnPropertyNames(obj1);
+  const keys2 = Object.getOwnPropertyNames(obj2);
 
   if (keys1.length !== keys2.length) {
     return false;
@@ -10,22 +11,21 @@ export function deepEqual(obj1, obj2) {
 
   for (var i = 0; i < keys1.length; i++) {
     let key = keys1[i];
-    if (!keys2.includes(key)) {
-      return false;
-    }
+
     if (obj1[key] !== obj2[key]) {
-      return false;
+      return false
     }
   }
+
   return true;
 }
 
-export function deepIncludes(set1, key) {
+export const deepIncludes = function(set1, key) {
   for (let elem of set1) {
-    if (elem[0] === key[0] &&
-        deepEqual(elem[1], key[1])) {
+    if (elem[0] === key[0] && deepEqual(elem[1], key[1])) {
       return true;
     }
-  };
+  }
+
   return false;
 }
