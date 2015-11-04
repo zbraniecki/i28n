@@ -1,8 +1,18 @@
 
-export function onAddedDefinitions(elements) {
-  console.log(elements);
+function setAttributes(key, value, options) {
 }
 
-export function onRemovedDefinitions() {
+function setName() {
 }
 
+function setType() {
+}
+
+function setValue() {
+}
+
+function setOptions() {
+}
+
+function getAttributes() {
+}

@@ -11,7 +11,9 @@ export class View {
     this._i18nWatcher = new NodeWatcher(doc, {
       type: ['added', 'modified'],
       selector: '[data-i18n-value]',
+      attributes: ['data-i18n-value', 'data-i18n-name', 'data-i18n-type', 'data-i18n-options'],
       onAdded: onAddedI18nElement.bind(this),
+      onModified: onAddedI18nElement.bind(this),
     });
 
     this._headWatcher.start();
@@ -41,12 +43,17 @@ function onAddedDefinitions(elements) {
 
 function onAddedI18nElement(elements) {
   for (let elem of elements) {
+    if (!elem.hasAttribute('data-i18n-value')) {
+      continue;
+    }
     const value = elem.getAttribute('data-i18n-value');
+    const name = elem.hasAttribute('data-i18n-name') ?
+      elem.getAttribute('data-i18n-name') : undefined;
     const type = elem.getAttribute('data-i18n-type');
     const options = elem.hasAttribute('data-i18n-options') ?
       JSON.parse(elem.getAttribute('data-i18n-options')) : undefined;
 
-    const formatter = this._ctx._cache.get({type, options});
+    const formatter = this._ctx._cache.get(name || {type, options});
     switch (type) {
       case 'datetime':
         let resolvedValue = new Date(parseInt(value));

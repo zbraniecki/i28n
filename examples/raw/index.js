@@ -21,3 +21,8 @@ console.log(formatter.format(now));
 var formatter = document.mozI18n.get({type: 'datetime'});
 var now = new Date();
 console.log(formatter.format(now));
+
+var elem = document.getElementById('foo');
+
+elem.setAttribute('data-i18n-name', 'longDate');
+elem.setAttribute('data-i18n-value', 100000000000);

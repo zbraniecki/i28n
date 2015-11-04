@@ -11,6 +11,11 @@ export class NodeWatcher {
       childList: true,
       subtree: true,
     };
+
+    if (this._options.type.includes('modified')) {
+      this._observerConfig.attributes = true;
+      this._observerConfig.attributeFilter = this._options.attributes;
+    }
   }
 
   start() {
@@ -23,20 +28,24 @@ export class NodeWatcher {
 }
 
 function onMutations(nodeWatcher, mutations) {
-  const targets = new Set();
-  const removed = new Set();
+  const addedTargets = new Set();
+  const modifiedTargets = new Set();
+  const removedTargets = new Set();
 
   for (let mutation of mutations) {
     switch (mutation.type) {
+      case 'attributes':
+        modifiedTargets.add(mutation.target);
+        break;
       case 'childList':
         for (let addedNode of mutation.addedNodes) {
           if (addedNode.nodeType === addedNode.ELEMENT_NODE) {
             if (addedNode.childElementCount) {
               getMatchingElements(nodeWatcher._options.selector, addedNode).forEach(
-                targets.add.bind(targets));
+                addedTargets.add.bind(addedTargets));
             } else {
               if (addedNode.matches(nodeWatcher._options.selector)) {
-                targets.add(addedNode);
+                addedTargets.add(addedNode);
               }
             }
           }
@@ -45,8 +54,11 @@ function onMutations(nodeWatcher, mutations) {
     }
   }
 
-  if (targets.size) {
-    nodeWatcher._options.onAdded(targets);
+  if (addedTargets.size) {
+    nodeWatcher._options.onAdded(addedTargets);
+  }
+  if (modifiedTargets.size) {
+    nodeWatcher._options.onModified(modifiedTargets);
   }
 }
 
