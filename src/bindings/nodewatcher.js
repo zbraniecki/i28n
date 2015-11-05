@@ -32,13 +32,13 @@ function onMutations(nodeWatcher, mutations) {
   const modifiedTargets = new Set();
   const removedTargets = new Set();
 
-  for (let mutation of mutations) {
+  for (const mutation of mutations) {
     switch (mutation.type) {
       case 'attributes':
         modifiedTargets.add(mutation.target);
         break;
       case 'childList':
-        for (let addedNode of mutation.addedNodes) {
+        for (const addedNode of mutation.addedNodes) {
           if (addedNode.nodeType === addedNode.ELEMENT_NODE) {
             if (addedNode.childElementCount) {
               getMatchingElements(nodeWatcher._options.selector, addedNode).forEach(

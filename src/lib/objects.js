@@ -10,6 +10,12 @@ export const knownObjects = {
 
       return Intl.DateTimeFormat(navigator.languages, resolvedOptions);
     },
+
+    isTypeAffected: function (reason) {
+      return ['timeformatchange', 'languagechange',
+      'moztimechange'].includes(reason);
+    },
+
     isAffected: function (reason, options) {
       if (reason === 'languagechange') {
         return true;

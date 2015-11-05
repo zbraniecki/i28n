@@ -7,7 +7,7 @@ export class Cache {
     this._names = new Map();
   }
   _find({ type, options }) {
-    for (let [key, value] of this._store) {
+    for (const [key, value] of this._store) {
       if (key[0] === type && deepEqual(key[1], options)) {
         return value;
       }
@@ -20,7 +20,7 @@ export class Cache {
 
   _set(key) {
     console.log('setting a new cache object');
-    let { type, options } = typeof key === 'string' ?
+    const { type, options } = typeof key === 'string' ?
       this._names.get(key) : key;
 
     const intlObject = knownObjects[type].create(options || {});
@@ -31,7 +31,7 @@ export class Cache {
   get(key) {
     if (typeof key === 'string') {
       if (!this._names.has(key)) {
-        throw new Error('Undefined intl object: ' + key);
+        throw new Error(`Undefined intl object: ${key}`);
       }
       key = this._names.get(key);
     }
@@ -39,21 +39,14 @@ export class Cache {
     return this._find(key) || this._set(key);
   }
 
-  getAffected(evt) {
+  resetObjects(evt) {
     const affectedKeys = new Set();
-    this.store.forEach((obj, [type, options]) => {
-      if (knownObjects[type].isAffected(evt.type, options)) {
-        affectedKeys.add([type, options]);
+    this._store.forEach((obj, key) => {
+      if (knownObjects[key[0]].isAffected(evt.type, key[1] || {})) {
+        this._store.delete(key);
+        affectedKeys.add(key);
       }
     });
     return affectedKeys;
-  }
-
-  resetKeys(keys) {
-    this.store.forEach((obj, key) => {
-      if (deepIncludes(keys, key)) {
-        this.store.delete(key);
-      }
-    });
   }
 }

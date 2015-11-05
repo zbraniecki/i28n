@@ -35,10 +35,46 @@
   "devDependencies": {
     "del": "^2.0.2",
     "gulp": "^3.9.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-rollup": "^1.0.1"
   },
   "engine": {
     "node": ">=5.0"
+  },
+  "eslintConfig": {
+    "ecmaFeatures": {
+      "modules": true
+    },
+    "env": {
+      "es6": true
+    },
+    "rules": {
+       "valid-typeof": 1,
+       "no-console": 1,
+       "no-dupe-args": 2,
+       "no-dupe-keys": 2,
+       "no-duplicate-case": 2,
+       "no-extra-semi": 1,
+       "no-unreachable": 1,
+       "complexity": 1,
+       "consistent-return": 2,
+       "curly": [2, "multi-line"],
+       "eqeqeq": 2,
+       "no-extend-native": 2,
+       "no-extra-bind": 1,
+       "no-redeclare": 2,
+       "array-bracket-spacing": 2,
+       "brace-style": [2, "1tbs"],
+       "no-mixed-spaces-and-tabs": 2,
+       "prefer-arrow-callback": 1,
+       "prefer-const": 1,
+       "prefer-template": 1,
+       "prefer-spread": 1,
+       "strict": [2, "never"],
+       "quotes": [2, "single"],
+       "no-var": 1
+    }
   }
 }

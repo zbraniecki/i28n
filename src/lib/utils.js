@@ -9,8 +9,8 @@ export const deepEqual = function(obj1, obj2) {
     return false;
   }
 
-  for (var i = 0; i < keys1.length; i++) {
-    let key = keys1[i];
+  for (let i = 0; i < keys1.length; i++) {
+    const key = keys1[i];
 
     if (obj1[key] !== obj2[key]) {
       return false
@@ -21,7 +21,7 @@ export const deepEqual = function(obj1, obj2) {
 }
 
 export const deepIncludes = function(set1, key) {
-  for (let elem of set1) {
+  for (const elem of set1) {
     if (elem[0] === key[0] && deepEqual(elem[1], key[1])) {
       return true;
     }
