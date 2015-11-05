@@ -18,6 +18,17 @@ export class NodeWatcher {
     }
   }
 
+  prescan() {
+    const addedTargets = new Set();
+
+    getMatchingElements(this._options.selector, this._root).forEach(
+      addedTargets.add.bind(addedTargets));
+
+    if (addedTargets.size) {
+      this._options.onAdded(addedTargets);
+    }
+  }
+
   start() {
     this._observer.observe(this._root, this._observerConfig);
   }
@@ -32,13 +43,13 @@ function onMutations(nodeWatcher, mutations) {
   const modifiedTargets = new Set();
   const removedTargets = new Set();
 
-  for (const mutation of mutations) {
+  for (let mutation of mutations) {
     switch (mutation.type) {
       case 'attributes':
         modifiedTargets.add(mutation.target);
         break;
       case 'childList':
-        for (const addedNode of mutation.addedNodes) {
+        for (let addedNode of mutation.addedNodes) {
           if (addedNode.nodeType === addedNode.ELEMENT_NODE) {
             if (addedNode.childElementCount) {
               getMatchingElements(nodeWatcher._options.selector, addedNode).forEach(

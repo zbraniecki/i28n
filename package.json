@@ -33,12 +33,23 @@
     "i28n"
   ],
   "devDependencies": {
+    "chai": "^3.4.0",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
-    "gulp-rollup": "^1.0.1"
+    "gulp-rollup": "^1.0.1",
+    "jasmine": "^2.3.2",
+    "karma": "^0.13.15",
+    "karma-chai": "^0.1.0",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-fixture": "^0.2.5",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-json-fixtures-preprocessor": "0.0.5",
+    "karma-mocha": "^0.2.0",
+    "mocha": "^2.3.3"
   },
   "engine": {
     "node": ">=5.0"
@@ -51,30 +62,42 @@
       "es6": true
     },
     "rules": {
-       "valid-typeof": 1,
-       "no-console": 1,
-       "no-dupe-args": 2,
-       "no-dupe-keys": 2,
-       "no-duplicate-case": 2,
-       "no-extra-semi": 1,
-       "no-unreachable": 1,
-       "complexity": 1,
-       "consistent-return": 2,
-       "curly": [2, "multi-line"],
-       "eqeqeq": 2,
-       "no-extend-native": 2,
-       "no-extra-bind": 1,
-       "no-redeclare": 2,
-       "array-bracket-spacing": 2,
-       "brace-style": [2, "1tbs"],
-       "no-mixed-spaces-and-tabs": 2,
-       "prefer-arrow-callback": 1,
-       "prefer-const": 1,
-       "prefer-template": 1,
-       "prefer-spread": 1,
-       "strict": [2, "never"],
-       "quotes": [2, "single"],
-       "no-var": 1
+      "valid-typeof": 1,
+      "no-console": 1,
+      "no-dupe-args": 2,
+      "no-dupe-keys": 2,
+      "no-duplicate-case": 2,
+      "no-extra-semi": 1,
+      "no-unreachable": 1,
+      "complexity": 1,
+      "consistent-return": 2,
+      "curly": [
+        2,
+        "multi-line"
+      ],
+      "eqeqeq": 2,
+      "no-extend-native": 2,
+      "no-extra-bind": 1,
+      "no-redeclare": 2,
+      "array-bracket-spacing": 2,
+      "brace-style": [
+        2,
+        "1tbs"
+      ],
+      "no-mixed-spaces-and-tabs": 2,
+      "prefer-arrow-callback": 1,
+      "prefer-const": 1,
+      "prefer-template": 1,
+      "prefer-spread": 1,
+      "strict": [
+        2,
+        "never"
+      ],
+      "quotes": [
+        2,
+        "single"
+      ],
+      "no-var": 1
     }
   }
 }

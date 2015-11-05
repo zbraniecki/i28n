@@ -7,7 +7,7 @@ export class Cache {
     this._names = new Map();
   }
   _find({ type, options }) {
-    for (const [key, value] of this._store) {
+    for (let [key, value] of this._store) {
       if (key[0] === type && deepEqual(key[1], options)) {
         return value;
       }

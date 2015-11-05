@@ -4,6 +4,7 @@ var rename = require('gulp-rename');
 var del = require('del');
 var plumber = require('gulp-plumber');
 var eslint = require('gulp-eslint');
+var Server = require('karma').Server;
 
 gulp.task('build', function() {
   gulp.src('src/runtime/index.js', {read: false})
@@ -15,6 +16,19 @@ gulp.task('build', function() {
     }))
     .pipe(rollup({ format: 'iife' }))
     .pipe(rename('i28n.js'))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('buildtest', function() {
+  gulp.src('src/runtime/buildtest.js', {read: false})
+    .pipe(plumber({
+      handleError: function(err) {
+        console.log(err);
+        this.emit('end');
+      }
+    }))
+    .pipe(rollup({ format: 'iife' }))
+    .pipe(rename('build-i28n.js'))
     .pipe(gulp.dest('dist'));
 });
 
@@ -36,4 +50,11 @@ gulp.task('lint', function() {
     }))
     .pipe(eslint())
     .pipe(eslint.format())
+});
+
+gulp.task('test', ['buildtest'], function(done) {
+  new Server({
+    configFile: __dirname + '/build/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });

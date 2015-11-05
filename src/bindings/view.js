@@ -4,6 +4,11 @@ import { documentReady } from './shims';
 
 export class View {
   constructor(doc) {
+    this._cache = new Cache();
+    this._doc = doc;
+
+    this.ready = documentReady();
+
     this._headWatcher = new NodeWatcher(doc.head, {
       type: ['added'],
       selector: 'style[type="application/mozi18n"]',
@@ -17,13 +22,13 @@ export class View {
       onModified: onAddedI18nElement.bind(this),
     });
 
+    if (doc.readyState !== 'loading') {
+      this._headWatcher.prescan();
+      this._i18nWatcher.prescan();
+    }
+
     this._headWatcher.start();
     this._i18nWatcher.start();
-
-    this._cache = new Cache();
-    this._doc = doc;
-
-    this.ready = documentReady();
   }
 
   define(name, key) {
@@ -46,17 +51,17 @@ function findAffectedElements(root, evt) {
 }
 
 function onAddedDefinitions(elements) {
-  for (const elem of elements) {
+  for (let elem of elements) {
     const definitions = JSON.parse(elem.textContent);
 
-    for (const name in definitions) {
+    for (let name in definitions) {
       this.define(name, definitions[name]);
     }
   }
 }
 
 function onAddedI18nElement(elements) {
-  for (const elem of elements) {
+  for (let elem of elements) {
     if (!elem.hasAttribute('data-i18n-value')) {
       continue;
     }
