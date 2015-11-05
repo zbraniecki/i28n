@@ -1,5 +1,6 @@
 import { Context } from '../lib/context';
 import { NodeWatcher } from './nodewatcher';
+import { documentReady } from './shims';
 
 export class View {
   constructor(doc) {
@@ -20,6 +21,8 @@ export class View {
     this._i18nWatcher.start();
 
     this._ctx = new Context(doc);
+
+    this.ready = documentReady();
   }
 
   define(name, key) {
