@@ -45,16 +45,16 @@ document.mozI18n.observe('datetime', logDateTime);
 Development
 -----------
 
-```bash
+```shell
 > npm install --dev
 
-> gulp lint
+> gulp lint # uses es-lint
 
-> gulp build
+> gulp build # builds ./dist/i28n.js
 
-> gulp watch
+> gulp watch # builds and rebuilds on change in ./src
 
-> gulp test
+> gulp test # in-browser tests using Firefox nightly
 ```
 
 In order to test you need to have `FIREFOX_BIN` pointing at Nightly Firefox
