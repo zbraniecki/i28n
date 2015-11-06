@@ -39,6 +39,16 @@ export class Cache {
     return this._find(key) || this._set(key);
   }
 
+  getAffectedTypes(evt) {
+    const affectedKeys = new Set();
+    this._store.forEach((obj, key) => {
+      if (knownObjects[key[0]].isTypeAffected(evt.type)) {
+        affectedKeys.add(key[0]);
+      }
+    });
+    return affectedKeys;
+  }
+
   resetObjects(evt) {
     const affectedKeys = new Set();
     this._store.forEach((obj, key) => {

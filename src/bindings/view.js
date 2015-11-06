@@ -14,12 +14,12 @@ export class View {
       selector: 'style[type="application/mozi18n"]',
       onAdded: onAddedDefinitions.bind(this),
     });
-    this._i18nWatcher = new NodeWatcher(doc, {
+    this._i18nWatcher = new NodeWatcher(doc.documentElement, {
       type: ['added', 'modified'],
       selector: '[data-i18n-value]',
       attributes: ['data-i18n-value', 'data-i18n-name', 'data-i18n-type', 'data-i18n-options'],
-      onAdded: onAddedI18nElement.bind(this),
-      onModified: onAddedI18nElement.bind(this),
+      onAdded: formatElements.bind(this),
+      onModified: formatElements.bind(this),
     });
 
     if (doc.readyState !== 'loading') {
@@ -40,14 +40,25 @@ export class View {
   }
 
   handleEvent(evt) {
+    const affectedElements = findAffectedElements.call(this,
+        this._doc.documentElement, evt);
     const affectedObjects = this._cache.resetObjects(evt);
-    const affectedElement = findAffectedElements(this._doc, evt);
 
-    fireObservers(affectedObjects);
+    formatElements.call(this, affectedElements);
+    //fireObservers();
   }
 }
 
 function findAffectedElements(root, evt) {
+  const affectedTypes = this._cache.getAffectedTypes(evt);
+
+  const selector = Array.from(affectedTypes).map(
+    type => `[data-i18n-type="${type}"]`).join(',');
+
+  if (!selector) {
+    return [];
+  }
+  return root.querySelectorAll(selector);
 }
 
 function onAddedDefinitions(elements) {
@@ -60,7 +71,7 @@ function onAddedDefinitions(elements) {
   }
 }
 
-function onAddedI18nElement(elements) {
+function formatElements(elements) {
   for (let elem of elements) {
     if (!elem.hasAttribute('data-i18n-value')) {
       continue;
