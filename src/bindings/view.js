@@ -84,9 +84,14 @@ function formatElements(elements) {
       JSON.parse(elem.getAttribute('data-i18n-options')) : undefined;
 
     const formatter = this._cache.get(name || {type, options});
+    let resolvedValue;
     switch (type) {
       case 'datetime':
-        const resolvedValue = new Date(parseInt(value));
+        resolvedValue = new Date(parseInt(value));
+        elem.textContent = formatter.format(resolvedValue);
+        break;
+      case 'number':
+        resolvedValue = new Date(parseInt(value));
         elem.textContent = formatter.format(resolvedValue);
         break;
     }

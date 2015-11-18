@@ -17,12 +17,31 @@ export const knownObjects = {
     },
 
     isAffected: function (reason, options) {
-      if (reason === 'languagechange') {
+      if (reason === 'languagechange' || reason === 'moztimechange') {
         return true;
       }
 
       if (reason === 'timeformatchange') {
         return 'hour' in options;
+      }
+
+      return false;
+    }
+  },
+  number: {
+    create: function (options) {
+      const resolvedOptions = Object.assign({}, options);
+
+      return Intl.NumberFormat(navigator.languages, resolvedOptions);
+    },
+
+    isTypeAffected: function (reason) {
+      return ['languagechange'].includes(reason);
+    },
+
+    isAffected: function (reason, options) {
+      if (reason === 'languagechange') {
+        return true;
       }
 
       return false;
