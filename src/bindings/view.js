@@ -9,30 +9,19 @@ export class View {
 
     this.ready = documentReady();
 
-    this._headWatcher = new NodeWatcher(doc.head, {
-      type: ['added'],
-      selector: 'style[type="application/mozi18n"]',
-      onAdded: onAddedDefinitions.bind(this),
-    });
     this._i18nWatcher = new NodeWatcher(doc.documentElement, {
       type: ['added', 'modified'],
       selector: '[data-i18n-value]',
-      attributes: ['data-i18n-value', 'data-i18n-name', 'data-i18n-type', 'data-i18n-options'],
+      attributes: ['data-i18n-value', 'data-i18n-type', 'data-i18n-options'],
       onAdded: formatElements.bind(this),
       onModified: formatElements.bind(this),
     });
 
     if (doc.readyState !== 'loading') {
-      this._headWatcher.prescan();
       this._i18nWatcher.prescan();
     }
 
-    this._headWatcher.start();
     this._i18nWatcher.start();
-  }
-
-  define(name, key) {
-    return this._cache.define(name, key);
   }
 
   get(key) {
@@ -61,29 +50,17 @@ function findAffectedElements(root, evt) {
   return root.querySelectorAll(selector);
 }
 
-function onAddedDefinitions(elements) {
-  for (let elem of elements) {
-    const definitions = JSON.parse(elem.textContent);
-
-    for (let name in definitions) {
-      this.define(name, definitions[name]);
-    }
-  }
-}
-
 function formatElements(elements) {
   for (let elem of elements) {
     if (!elem.hasAttribute('data-i18n-value')) {
       continue;
     }
     const value = elem.getAttribute('data-i18n-value');
-    const name = elem.hasAttribute('data-i18n-name') ?
-      elem.getAttribute('data-i18n-name') : undefined;
     const type = elem.getAttribute('data-i18n-type');
     const options = elem.hasAttribute('data-i18n-options') ?
       JSON.parse(elem.getAttribute('data-i18n-options')) : undefined;
 
-    const formatter = this._cache.get(name || {type, options});
+    const formatter = this._cache.get({type, options});
     let resolvedValue;
     switch (type) {
       case 'datetime':
